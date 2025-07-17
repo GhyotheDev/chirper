@@ -58,7 +58,7 @@ See the `docs` folder for detailed deployment instructions and architecture diag
 
 ## Screenshots
 
-![Chirper Screenshot](screenshot.png)
+![Chirper Screenshot](chirper/chirperrunner.png)
 
 ## Note
 
