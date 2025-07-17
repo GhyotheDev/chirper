@@ -1,0 +1,338 @@
+---
+# Namespace
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: chirper
+  labels:
+    name: chirper
+    environment: production
+
+---
+# ConfigMap for application configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: chirper-config
+  namespace: chirper
+data:
+  db_host: "chirper-db.abcdef123456.us-west-2.rds.amazonaws.com"
+  db_name: "chirper"
+  redis_host: "chirper-redis.abcdef.ng.0001.usw2.cache.amazonaws.com"
+  s3_bucket: "chirper-media-production"
+  cloudfront_domain: "d1234abcdef.cloudfront.net"
+  api_url: "https://api.chirper.example.com"
+  environment: "production"
+
+---
+# Secret for sensitive data
+apiVersion: v1
+kind: Secret
+metadata:
+  name: chirper-secrets
+  namespace: chirper
+type: Opaque
+data:
+  # These are base64 encoded placeholders - replace with actual values
+  db_user: Y2hpcnBlcl9hZG1pbg==  # chirper_admin
+  db_password: cGFzc3dvcmQxMjM=   # password123
+  jwt_secret: c2VjcmV0and0a2V5    # secretjwtkey
+  aws_access_key: QUtJQUlPU0ZPRE5OTkVYQU1QTEU=
+  aws_secret_key: d0phbHJYVXRuRkVNSUs3TURFTkdJUEpYVGw1blhSNWE0Nw==
+
+---
+# Frontend Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chirper-frontend
+  namespace: chirper
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: chirper
+      tier: frontend
+  template:
+    metadata:
+      labels:
+        app: chirper
+        tier: frontend
+    spec:
+      containers:
+      - name: frontend
+        image: ${ECR_REGISTRY}/chirper-frontend:latest
+        ports:
+        - containerPort: 80
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+          requests:
+            cpu: "200m"
+            memory: "256Mi"
+        env:
+        - name: API_URL
+          valueFrom:
+            configMapKeyRef:
+              name: chirper-config
+              key: api_url
+        - name: CLOUDFRONT_DOMAIN
+          valueFrom:
+            configMapKeyRef:
+              name: chirper-config
+              key: cloudfront_domain
+        - name: ENVIRONMENT
+          valueFrom:
+            configMapKeyRef:
+              name: chirper-config
+              key: environment
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
+
+---
+# Backend API Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chirper-api
+  namespace: chirper
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: chirper
+      tier: backend
+  template:
+    metadata:
+      labels:
+        app: chirper
+        tier: backend
+    spec:
+      containers:
+      - name: api
+        image: ${ECR_REGISTRY}/chirper-api:latest
+        ports:
+        - containerPort: 3000
+        resources:
+          limits:
+            cpu: "1000m"
+            memory: "1Gi"
+          requests:
+            cpu: "500m"
+            memory: "512Mi"
+        env:
+        - name: DB_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: chirper-config
+              key: db_host
+        - name: DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: chirper-config
+              key: db_name
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: chirper-secrets
+              key: db_user
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: chirper-secrets
+              key: db_password
+        - name: REDIS_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: chirper-config
+              key: redis_host
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: chirper-secrets
+              key: jwt_secret
+        - name: S3_BUCKET
+          valueFrom:
+            configMapKeyRef:
+              name: chirper-config
+              key: s3_bucket
+        - name: AWS_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: chirper-secrets
+              key: aws_access_key
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: chirper-secrets
+              key: aws_secret_key
+        - name: ENVIRONMENT
+          valueFrom:
+            configMapKeyRef:
+              name: chirper-config
+              key: environment
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+
+---
+# Frontend Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: chirper-frontend
+  namespace: chirper
+spec:
+  selector:
+    app: chirper
+    tier: frontend
+  ports:
+  - port: 80
+    targetPort: 80
+  type: ClusterIP
+
+---
+# Backend API Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: chirper-api
+  namespace: chirper
+spec:
+  selector:
+    app: chirper
+    tier: backend
+  ports:
+  - port: 80
+    targetPort: 3000
+  type: ClusterIP
+
+---
+# Ingress for Frontend
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: chirper-frontend-ingress
+  namespace: chirper
+  annotations:
+    kubernetes.io/ingress.class: "alb"
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/certificate-arn: ${ACM_CERTIFICATE_ARN}
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig": {"Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
+spec:
+  rules:
+  - host: chirper.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: chirper-frontend
+            port:
+              number: 80
+
+---
+# Ingress for API
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: chirper-api-ingress
+  namespace: chirper
+  annotations:
+    kubernetes.io/ingress.class: "alb"
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/certificate-arn: ${ACM_CERTIFICATE_ARN}
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig": {"Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
+spec:
+  rules:
+  - host: api.chirper.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: chirper-api
+            port:
+              number: 80
+
+---
+# Horizontal Pod Autoscaler for Frontend
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: chirper-frontend-hpa
+  namespace: chirper
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: chirper-frontend
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+
+---
+# Horizontal Pod Autoscaler for API
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: chirper-api-hpa
+  namespace: chirper
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: chirper-api
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80

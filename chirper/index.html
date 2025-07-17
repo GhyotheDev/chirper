@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chirper - Share your thoughts</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Left Sidebar -->
+        <aside class="left-sidebar">
+            <div class="logo">
+                <i class="fab fa-twitter"></i>
+            </div>
+            <nav class="main-nav">
+                <a href="#" class="nav-item active">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-search"></i>
+                    <span>Explore</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="far fa-bell"></i>
+                    <span>Notifications</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="far fa-envelope"></i>
+                    <span>Messages</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="far fa-bookmark"></i>
+                    <span>Bookmarks</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="far fa-list-alt"></i>
+                    <span>Lists</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="far fa-user"></i>
+                    <span>Profile</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-ellipsis-h"></i>
+                    <span>More</span>
+                </a>
+            </nav>
+            <button class="chirp-btn">Chirp</button>
+            <div class="user-profile">
+                <img src="https://ui-avatars.com/api/?name=John+Doe&background=random" alt="Profile" class="profile-img">
+                <div class="profile-info">
+                    <div class="profile-name">John Doe</div>
+                    <div class="profile-handle">@johndoe</div>
+                </div>
+                <i class="fas fa-ellipsis-h"></i>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="main-header">
+                <h2>Home</h2>
+                <div class="tabs">
+                    <div class="tab active">For you</div>
+                    <div class="tab">Following</div>
+                </div>
+            </header>
+
+            <div class="compose-chirp">
+                <img src="https://ui-avatars.com/api/?name=John+Doe&background=random" alt="Profile" class="profile-img">
+                <div class="compose-input-container">
+                    <textarea placeholder="What's happening?" class="compose-input"></textarea>
+                    <div class="compose-actions">
+                        <div class="compose-tools">
+                            <button class="tool-btn"><i class="far fa-image"></i></button>
+                            <button class="tool-btn"><i class="fas fa-film"></i></button>
+                            <button class="tool-btn"><i class="far fa-chart-bar"></i></button>
+                            <button class="tool-btn"><i class="far fa-smile"></i></button>
+                            <button class="tool-btn"><i class="far fa-calendar"></i></button>
+                            <button class="tool-btn"><i class="fas fa-map-marker-alt"></i></button>
+                        </div>
+                        <button class="chirp-btn small">Chirp</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline">
+                <!-- Chirp 1 -->
+                <div class="chirp">
+                    <img src="https://ui-avatars.com/api/?name=Tech+News&background=random" alt="Profile" class="profile-img">
+                    <div class="chirp-content">
+                        <div class="chirp-header">
+                            <span class="chirp-author">Tech News</span>
+                            <span class="chirp-handle">@technews</span>
+                            <span class="chirp-time">· 2h</span>
+                        </div>
+                        <div class="chirp-text">
+                            Just in: The latest developer survey shows JavaScript remains the most used programming language for the 8th year in a row, with Python and TypeScript gaining ground quickly.
+                        </div>
+                        <div class="chirp-image">
+                            <img src="img/tech-news.jpg" alt="Tech News">
+                        </div>
+                        <div class="chirp-actions">
+                            <button class="action-btn"><i class="far fa-comment"></i> <span>42</span></button>
+                            <button class="action-btn"><i class="fas fa-retweet"></i> <span>152</span></button>
+                            <button class="action-btn"><i class="far fa-heart"></i> <span>358</span></button>
+                            <button class="action-btn"><i class="far fa-share-square"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chirp 2 -->
+                <div class="chirp">
+                    <img src="https://ui-avatars.com/api/?name=Jane+Smith&background=random" alt="Profile" class="profile-img">
+                    <div class="chirp-content">
+                        <div class="chirp-header">
+                            <span class="chirp-author">Jane Smith</span>
+                            <span class="chirp-handle">@janesmith</span>
+                            <span class="chirp-time">· 5h</span>
+                        </div>
+                        <div class="chirp-text">
+                            Just deployed my first Kubernetes cluster on AWS! The learning curve was steep, but the automation and scalability benefits are absolutely worth it. #DevOps #Kubernetes #AWS
+                        </div>
+                        <div class="chirp-actions">
+                            <button class="action-btn"><i class="far fa-comment"></i> <span>8</span></button>
+                            <button class="action-btn"><i class="fas fa-retweet"></i> <span>23</span></button>
+                            <button class="action-btn"><i class="far fa-heart"></i> <span>89</span></button>
+                            <button class="action-btn"><i class="far fa-share-square"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chirp 3 -->
+                <div class="chirp">
+                    <img src="https://ui-avatars.com/api/?name=Dev+Community&background=random" alt="Profile" class="profile-img">
+                    <div class="chirp-content">
+                        <div class="chirp-header">
+                            <span class="chirp-author">Dev Community</span>
+                            <span class="chirp-handle">@devcom</span>
+                            <span class="chirp-time">· 8h</span>
+                        </div>
+                        <div class="chirp-text">
+                            🔥 Hot take: Documentation is just as important as code. A well-documented project with decent code will often be more successful than a perfectly coded project with poor documentation. Agree or disagree?
+                        </div>
+                        <div class="chirp-actions">
+                            <button class="action-btn"><i class="far fa-comment"></i> <span>124</span></button>
+                            <button class="action-btn"><i class="fas fa-retweet"></i> <span>267</span></button>
+                            <button class="action-btn"><i class="far fa-heart"></i> <span>1.2K</span></button>
+                            <button class="action-btn"><i class="far fa-share-square"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chirp 4 -->
+                <div class="chirp">
+                    <img src="https://ui-avatars.com/api/?name=Alex+Johnson&background=random" alt="Profile" class="profile-img">
+                    <div class="chirp-content">
+                        <div class="chirp-header">
+                            <span class="chirp-author">Alex Johnson</span>
+                            <span class="chirp-handle">@alexj</span>
+                            <span class="chirp-time">· 12h</span>
+                        </div>
+                        <div class="chirp-text">
+                            Just finished my portfolio website redesign! Used React, Tailwind CSS, and deployed with Netlify. The continuous deployment workflow is a game-changer for my productivity.
+                        </div>
+                        <div class="chirp-image">
+                            <img src="img/portfolio.jpg" alt="Portfolio Website">
+                        </div>
+                        <div class="chirp-actions">
+                            <button class="action-btn"><i class="far fa-comment"></i> <span>18</span></button>
+                            <button class="action-btn"><i class="fas fa-retweet"></i> <span>34</span></button>
+                            <button class="action-btn"><i class="far fa-heart"></i> <span>142</span></button>
+                            <button class="action-btn"><i class="far fa-share-square"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chirp 5 -->
+                <div class="chirp">
+                    <img src="https://ui-avatars.com/api/?name=Cloud+Guru&background=random" alt="Profile" class="profile-img">
+                    <div class="chirp-content">
+                        <div class="chirp-header">
+                            <span class="chirp-author">Cloud Guru</span>
+                            <span class="chirp-handle">@cloudguru</span>
+                            <span class="chirp-time">· 1d</span>
+                        </div>
+                        <div class="chirp-text">
+                            Terraform vs CloudFormation: Which IaC tool should you choose for AWS? Our new comparison breaks down the pros and cons of each approach. #AWS #Terraform #CloudFormation #IaC
+                        </div>
+                        <div class="chirp-actions">
+                            <button class="action-btn"><i class="far fa-comment"></i> <span>32</span></button>
+                            <button class="action-btn"><i class="fas fa-retweet"></i> <span>78</span></button>
+                            <button class="action-btn"><i class="far fa-heart"></i> <span>215</span></button>
+                            <button class="action-btn"><i class="far fa-share-square"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Right Sidebar -->
+        <aside class="right-sidebar">
+            <div class="search-container">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search Chirper" class="search-input">
+            </div>
+
+            <div class="trends-container sidebar-container">
+                <h3>Trends for you</h3>
+                <div class="trend-item">
+                    <div class="trend-location">Trending in Technology</div>
+                    <div class="trend-tag">#Kubernetes</div>
+                    <div class="trend-count">5,128 chirps</div>
+                </div>
+                <div class="trend-item">
+                    <div class="trend-location">Trending in Programming</div>
+                    <div class="trend-tag">#TypeScript</div>
+                    <div class="trend-count">3,852 chirps</div>
+                </div>
+                <div class="trend-item">
+                    <div class="trend-location">Trending in DevOps</div>
+                    <div class="trend-tag">#Terraform</div>
+                    <div class="trend-count">2,456 chirps</div>
+                </div>
+                <div class="trend-item">
+                    <div class="trend-location">Trending in Cloud</div>
+                    <div class="trend-tag">#AWS</div>
+                    <div class="trend-count">8,741 chirps</div>
+                </div>
+                <div class="trend-item">
+                    <div class="trend-location">Trending in Web Dev</div>
+                    <div class="trend-tag">#ReactJS</div>
+                    <div class="trend-count">4,289 chirps</div>
+                </div>
+                <a href="#" class="show-more">Show more</a>
+            </div>
+
+            <div class="who-to-follow sidebar-container">
+                <h3>Who to follow</h3>
+                <div class="follow-item">
+                    <img src="https://ui-avatars.com/api/?name=AWS+Official&background=random" alt="Profile" class="profile-img">
+                    <div class="follow-info">
+                        <div class="follow-name">AWS Official</div>
+                        <div class="follow-handle">@aws</div>
+                    </div>
+                    <button class="follow-btn">Follow</button>
+                </div>
+                <div class="follow-item">
+                    <img src="https://ui-avatars.com/api/?name=Kubernetes&background=random" alt="Profile" class="profile-img">
+                    <div class="follow-info">
+                        <div class="follow-name">Kubernetes</div>
+                        <div class="follow-handle">@kubernetes</div>
+                    </div>
+                    <button class="follow-btn">Follow</button>
+                </div>
+                <div class="follow-item">
+                    <img src="https://ui-avatars.com/api/?name=Terraform&background=random" alt="Profile" class="profile-img">
+                    <div class="follow-info">
+                        <div class="follow-name">HashiCorp</div>
+                        <div class="follow-handle">@hashicorp</div>
+                    </div>
+                    <button class="follow-btn">Follow</button>
+                </div>
+                <a href="#" class="show-more">Show more</a>
+            </div>
+
+            <div class="footer">
+                <nav class="footer-links">
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Cookie Policy</a>
+                    <a href="#">Accessibility</a>
+                    <a href="#">Ads info</a>
+                    <a href="#">More...</a>
+                </nav>
+                <div class="copyright">© 2023 Chirper, Inc.</div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Chirp Modal -->
+    <div id="chirp-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close-modal"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="compose-chirp modal-compose">
+                    <img src="https://ui-avatars.com/api/?name=John+Doe&background=random" alt="Profile" class="profile-img">
+                    <div class="compose-input-container">
+                        <textarea placeholder="What's happening?" class="compose-input"></textarea>
+                        <div class="compose-actions">
+                            <div class="compose-tools">
+                                <button class="tool-btn"><i class="far fa-image"></i></button>
+                                <button class="tool-btn"><i class="fas fa-film"></i></button>
+                                <button class="tool-btn"><i class="far fa-chart-bar"></i></button>
+                                <button class="tool-btn"><i class="far fa-smile"></i></button>
+                                <button class="tool-btn"><i class="far fa-calendar"></i></button>
+                                <button class="tool-btn"><i class="fas fa-map-marker-alt"></i></button>
+                            </div>
+                            <button class="chirp-btn small">Chirp</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
